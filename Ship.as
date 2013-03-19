@@ -1,22 +1,1 @@
-package
-{
-	public class Ship extends MovieClip
-	{
-		private var parts:Vector<Part>;
-
-		public function Ship(_rootPart:Part)
-		{
-			super();
-			parts.push(_rootPart);
-		}
-
-		public function update():void
-		{
-			//This logic won't really work...
-			for each(var part:Part in parts)
-			{
-				part.update();
-			}
-		}
-	}
-}
+﻿package{	import flash.display.MovieClip;		import Box2D.Dynamics.*;	import Box2D.Collision.*;	import Box2D.Collision.Shapes.*;	import Box2D.Dynamics.Joints.*;	import Box2D.Dynamics.Contacts.*;	import Box2D.Common.Math.*;		public class Ship extends MovieClip	{		public var justCreated:Boolean = true;				private var parts:Vector.<Part>;		private var world:b2World;		public function Ship(_world:b2World, _rootPart:Part)		{			super();						parts = new Vector.<Part>();						world = _world;			parts.push(_rootPart);		}		public function update():void		{			//This logic won't really work...			//controls need to be varied based on docking orientation			for each(var part:Part in parts)			{				if(part.justCreated)this.addChild(part);				part.update();			}		}	}}

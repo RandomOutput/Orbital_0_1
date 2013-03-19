@@ -1,55 +1,1 @@
-package
-{
-	private class Part extends MovieClip
-	{
-		var body_part:b2Body;
-		var partVisual:MovieClip;
-		var partType:String;
-
-		public function Part(_partType:String = "")
-		{
-			super();
-			partType = _partType;
-			init();
-		}
-
-		public function init():void
-		{
-			var BD_part:b2BodyDef = new b2BodyDef();
-			var FD_part:b2FixtureDef = new b2FixtureDef();
-			var boxDef:b2PolygonShape = new b2PolygonShape();
-
-			switch(partType)
-			{
-				case "playerShip":
-					//TODO: PLayer Ship
-					break;
-				default:
-					//Physics
-					BD_part.type = b2Body.b2_dynamicBody;
-					FD_part.shape = boxDef;
-					FD_part.density = 1;
-					FD_part.friction = 0.5;
-					FD_part.restitution = 0.1;
-					boxDef.SetAsBox(41 / 2 / pixelsPerMeter, 100 / 2 / pixelsPerMeter);
-					body_part.position.Set(320 / pixelsPerMeter, 240 / pixelsPerMeter);
-					body_part = world.CreateBody(BD_part);
-					body_part.CreateFixture(FD_part);
-
-					//Visuals
-					partVisual = new CSM();
-					this.addChild(partVisual);
-					partVisual.alpha = 0.5;
-					update();
-					break;
-			}
-		}
-
-		public function update():void
-		{
-			partVisual.x = body_part.GetPosition().x * pixelsPerMeter;
-			partVisual.y = body_part.GetPosition().y * pixelsPerMeter;
-			partVisual.rotation = body_part.GetAngle() * ( 180 / Math.PI );
-		}
-	}
-}
+﻿package{	import flash.display.MovieClip;	import StaticInputHandler;		import Box2D.Dynamics.*;	import Box2D.Collision.*;	import Box2D.Collision.Shapes.*;	import Box2D.Dynamics.Joints.*;	import Box2D.Dynamics.Contacts.*;	import Box2D.Common.Math.*;		public class Part extends MovieClip	{		public var justCreated:Boolean = true;				private var body_part:b2Body;		private var partVisual:MovieClip;		private var partType:String;		private var world:b2World;		public function Part(_world:b2World, _partType:String = "")		{			super();			world = _world;			partType = _partType;			init();		}		public function init():void		{			var BD_part:b2BodyDef = new b2BodyDef();			var FD_part:b2FixtureDef = new b2FixtureDef();			var boxDef:b2PolygonShape = new b2PolygonShape();			switch(partType)			{				case "playerShip":					//TODO: PLayer Ship					break;				default:					//Physics					BD_part.type = b2Body.b2_dynamicBody;					FD_part.shape = boxDef;					FD_part.density = 1;					FD_part.friction = 0.5;					FD_part.restitution = 0.1;					boxDef.SetAsBox(41 / 2 / StaticConfigHandler.pixelsPerMeter, 100 / 2 / StaticConfigHandler.pixelsPerMeter);					BD_part.position.Set(320 / StaticConfigHandler.pixelsPerMeter, 240 / StaticConfigHandler.pixelsPerMeter);					body_part = world.CreateBody(BD_part);					body_part.CreateFixture(FD_part);					//Visuals					partVisual = new CSM();					this.addChild(partVisual);					partVisual.alpha = 0.5;					update();					break;			}		}		public function update():void		{			if(StaticInputHandler.iKey) body_part.ApplyForce(body_part.GetWorldVector(StaticConfigHandler.RIGHT_VEC), body_part.GetWorldPoint(new b2Vec2(-1,-1)));			if(StaticInputHandler.oKey) body_part.ApplyForce(body_part.GetWorldVector(StaticConfigHandler.LEFT_VEC), body_part.GetWorldPoint(new b2Vec2( 1,-1)));			if(StaticInputHandler.kKey) body_part.ApplyForce(body_part.GetWorldVector(StaticConfigHandler.RIGHT_VEC), body_part.GetWorldPoint(new b2Vec2(-1, 1)));			if(StaticInputHandler.lKey) body_part.ApplyForce(body_part.GetWorldVector(StaticConfigHandler.LEFT_VEC), body_part.GetWorldPoint(new b2Vec2( 1, 1)));			if(StaticInputHandler.uKey) body_part.ApplyForce(body_part.GetWorldVector(StaticConfigHandler.DOWN_VEC), body_part.GetWorldPoint(new b2Vec2( 0, 0)));			if(StaticInputHandler.jKey) body_part.ApplyForce(body_part.GetWorldVector(StaticConfigHandler.UP_VEC), body_part.GetWorldPoint(new b2Vec2( 0, 0)));						this.x = body_part.GetPosition().x * StaticConfigHandler.pixelsPerMeter;			this.y = body_part.GetPosition().y * StaticConfigHandler.pixelsPerMeter;			this.rotation = body_part.GetAngle() * ( 180 / Math.PI );		}	}}
